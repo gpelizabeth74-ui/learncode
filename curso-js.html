@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript Fundamentos — LearnCode</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--muted:#7d8590;--accent:#58a6ff;--accent2:#3fb950;--jc:#f7df1e;--jcd:#b8a000;--font-mono:'JetBrains Mono',monospace;--font-display:'Syne',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-display);display:flex;min-height:100vh}
+.sidebar{width:260px;background:var(--bg2);border-right:1px solid var(--border);flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-header{padding:16px 20px;border-bottom:1px solid var(--border)}
+.back-btn{color:var(--muted);text-decoration:none;font-size:13px}.back-btn:hover{color:var(--text)}
+.course-name{font-size:14px;font-weight:700;color:var(--jc);margin-top:6px}
+.sidebar-section{padding:12px 20px 4px;font-size:10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.li{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;transition:background .15s;font-size:13px;border-left:2px solid transparent}
+.li:hover{background:var(--bg3)}
+.li.active{background:var(--bg3);border-left-color:var(--jc)}
+.li.done .ln{background:var(--accent2);color:#0e1117}
+.li.active .ln{background:var(--jc);color:#0e1117}
+.ln{width:22px;height:22px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--font-mono);font-weight:700;flex-shrink:0;color:var(--muted)}
+.lname{flex:1;color:var(--muted)}.li.active .lname,.li.done .lname{color:var(--text)}
+.pbw{padding:16px 20px;border-top:1px solid var(--border)}
+.pbl{font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.pb{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.pbf{height:100%;background:var(--jc);border-radius:2px;transition:width .4s}
+.main{flex:1;overflow-y:auto}
+.mh{padding:20px 40px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10}
+.lt{font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.ha{display:flex;gap:10px}
+.btn{padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-display);border:none;transition:all .2s}
+.bto{background:transparent;border:1px solid var(--border);color:var(--text)}.bto:hover{border-color:var(--jc);color:var(--jcd)}
+.btp{background:var(--jc);color:#0e1117}
+.btg{background:var(--accent2);color:#0e1117}
+.content{padding:40px;max-width:760px}
+.cs{margin-bottom:48px}
+.sb2{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:20px;font-size:11px;font-family:var(--font-mono);font-weight:700;margin-bottom:16px}
+.st{background:#58a6ff20;color:var(--accent)}.sp{background:#3fb95020;color:var(--accent2)}.sq{background:#e3b34120;color:#e3b341}
+.content h2{font-size:24px;font-weight:800;margin-bottom:16px;letter-spacing:-0.5px}
+.content h3{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--jc)}
+.content p{font-size:14px;line-height:1.8;color:#c9d1d9;font-family:var(--font-mono);margin-bottom:16px}
+.content ul{padding-left:20px;margin-bottom:16px}
+.content ul li{font-size:14px;line-height:2;color:#c9d1d9;font-family:var(--font-mono)}
+.cb{background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:16px 0}
+.cbh{padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:11px;font-family:var(--font-mono);color:var(--muted);display:flex;justify-content:space-between}
+.cpb{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;font-family:var(--font-mono)}.cpb:hover{color:var(--text)}
+.cb pre{padding:16px;font-family:var(--font-mono);font-size:13px;line-height:1.7;overflow-x:auto}
+.kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.cm{color:var(--muted)}.nu{color:#f2cc60}.bool{color:#79c0ff}
+.eb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:16px 0}
+.eh{padding:12px 16px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.ebody{padding:16px}
+.ed{font-size:13px;color:var(--muted);font-family:var(--font-mono);margin-bottom:12px;line-height:1.6}
+textarea.ee{width:100%;min-height:130px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px;font-family:var(--font-mono);font-size:13px;color:var(--text);resize:vertical;outline:none}
+textarea.ee:focus{border-color:var(--jc)}
+.console-out{width:100%;min-height:80px;background:#000;border:1px solid var(--border);border-radius:6px;padding:12px;font-family:var(--font-mono);font-size:12px;color:#00ff41;margin-top:10px;white-space:pre-wrap;word-break:break-all}
+.ea{display:flex;gap:8px;margin-top:10px}
+.bsm{padding:5px 12px;font-size:12px}
+.rm{margin-top:10px;padding:10px 14px;border-radius:6px;font-size:12px;font-family:var(--font-mono);display:none}
+.rok{background:#3fb95015;border:1px solid #3fb95040;color:var(--accent2)}
+.rerr{background:#f8514915;border:1px solid #f8514940;color:#f85149}
+.rai{background:#58a6ff10;border:1px solid #58a6ff30;color:var(--accent)}
+.qb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin:16px 0}
+.qq{font-size:15px;font-weight:700;margin-bottom:16px;line-height:1.5}
+.qo{display:flex;flex-direction:column;gap:8px}
+.qopt{padding:10px 16px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;font-family:var(--font-mono);transition:all .15s;text-align:left;background:transparent;color:var(--text);width:100%}
+.qopt:hover:not(:disabled){border-color:var(--jc);background:#f7df1e10}
+.qopt.correct{border-color:var(--accent2);background:#3fb95020;color:var(--accent2)}
+.qopt.wrong{border-color:#f85149;background:#f8514920;color:#f85149}
+.qfb{margin-top:10px;font-size:13px;font-family:var(--font-mono);display:none;padding:10px;border-radius:6px}
+.fbok{background:#3fb95015;color:var(--accent2);border:1px solid #3fb95040}
+.fberr{background:#f8514915;color:#f85149;border:1px solid #f8514940}
+.nvb{display:flex;justify-content:space-between;padding:40px;border-top:1px solid var(--border);margin-top:20px}
+.ib{background:var(--bg2);border:1px solid #f7df1e30;border-radius:8px;padding:16px;margin:16px 0}
+.ibt{font-size:12px;font-family:var(--font-mono);color:var(--jc);margin-bottom:8px;font-weight:700}
+.scb{margin-top:20px;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-family:var(--font-mono);font-size:13px;display:none}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a href="index.html" class="back-btn">← Volver al inicio</a>
+    <div class="course-name">JavaScript Fundamentos</div>
+    <div style="font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-top:4px">12 lecciones · 20 ejercicios</div>
+  </div>
+  <div class="sidebar-section">Módulo 1 — Bases</div>
+  <div class="li done" onclick="gl(1)"><div class="ln">✓</div><div class="lname">¿Qué es JS?</div></div>
+  <div class="li active" onclick="gl(2)"><div class="ln">2</div><div class="lname">Variables y tipos</div></div>
+  <div class="li" onclick="gl(3)"><div class="ln">3</div><div class="lname">Operadores</div></div>
+  <div class="li" onclick="gl(4)"><div class="ln">4</div><div class="lname">Condicionales</div></div>
+  <div class="sidebar-section">Módulo 2 — Funciones</div>
+  <div class="li" onclick="gl(5)"><div class="ln">5</div><div class="lname">Funciones</div></div>
+  <div class="li" onclick="gl(6)"><div class="ln">6</div><div class="lname">Arrays</div></div>
+  <div class="li" onclick="gl(7)"><div class="ln">7</div><div class="lname">Objetos</div></div>
+  <div class="li" onclick="gl(8)"><div class="ln">8</div><div class="lname">Bucles</div></div>
+  <div class="sidebar-section">Módulo 3 — DOM</div>
+  <div class="li" onclick="gl(9)"><div class="ln">9</div><div class="lname">DOM básico</div></div>
+  <div class="li" onclick="gl(10)"><div class="ln">10</div><div class="lname">Eventos</div></div>
+  <div class="li" onclick="gl(11)"><div class="ln">11</div><div class="lname">Fetch y APIs</div></div>
+  <div class="li" onclick="gl(12)"><div class="ln">12</div><div class="lname">Proyecto final</div></div>
+  <div class="pbw">
+    <div class="pbl"><span>Progreso</span><span id="pp">8%</span></div>
+    <div class="pb"><div class="pbf" id="pf" style="width:8%"></div></div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="mh">
+    <div class="lt" id="mt">Lección 2 — Variables y tipos de datos</div>
+    <div class="ha">
+      <button class="btn bto" onclick="askAI()">🤖 Preguntar IA</button>
+      <button class="btn btp" onclick="nl()">Siguiente →</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="cs">
+      <div class="sb2 st">📖 Teoría</div>
+      <h2>Variables y tipos de datos en JavaScript</h2>
+      <p>Las variables son contenedores para guardar información. En JavaScript moderno usamos <strong>const</strong> y <strong>let</strong> para declararlas.</p>
+
+      <div class="cb">
+        <div class="cbh"><span>variables.js</span><button class="cpb" onclick="cp(this)">Copiar</button></div>
+        <pre><span class="cm">// const — no cambia su valor</span>
+<span class="kw">const</span> nombre = <span class="str">"Ana"</span>;
+<span class="kw">const</span> edad = <span class="nu">25</span>;
+<span class="kw">const</span> activo = <span class="bool">true</span>;
+
+<span class="cm">// let — puede cambiar su valor</span>
+<span class="kw">let</span> contador = <span class="nu">0</span>;
+contador = <span class="nu">1</span>; <span class="cm">// ✓ válido</span>
+
+<span class="cm">// Los 5 tipos de datos básicos:</span>
+<span class="kw">const</span> texto = <span class="str">"Hola mundo"</span>;    <span class="cm">// String</span>
+<span class="kw">const</span> numero = <span class="nu">42</span>;              <span class="cm">// Number</span>
+<span class="kw">const</span> decimal = <span class="nu">3.14</span>;           <span class="cm">// Number</span>
+<span class="kw">const</span> booleano = <span class="bool">false</span>;         <span class="cm">// Boolean</span>
+<span class="kw">const</span> vacio = <span class="bool">null</span>;             <span class="cm">// Null</span>
+<span class="kw">let</span> sinDefinir;                  <span class="cm">// Undefined</span>
+
+<span class="cm">// Ver el tipo con typeof</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> texto);    <span class="cm">// "string"</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> numero);   <span class="cm">// "number"</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> booleano); <span class="cm">// "boolean"</span></pre>
+      </div>
+
+      <h3>Template literals — strings modernos</h3>
+      <div class="cb">
+        <div class="cbh"><span>template-literals.js</span><button class="cpb" onclick="cp(this)">Copiar</button></div>
+        <pre><span class="kw">const</span> nombre = <span class="str">"María"</span>;
+<span class="kw">const</span> edad = <span class="nu">22</span>;
+
+<span class="cm">// Forma antigua (concatenación):</span>
+console.<span class="fn">log</span>(<span class="str">"Hola, "</span> + nombre + <span class="str">". Tienes "</span> + edad + <span class="str">" años"</span>);
+
+<span class="cm">// Forma moderna (template literal con backticks ` `):</span>
+console.<span class="fn">log</span>(<span class="str">`Hola, <span class="fn">${nombre}</span>. Tienes <span class="fn">${edad}</span> años`</span>);
+<span class="cm">// Output: Hola, María. Tienes 22 años</span></pre>
+      </div>
+
+      <div class="ib">
+        <div class="ibt">💡 Regla práctica</div>
+        <p>Usa <strong>const</strong> por defecto. Solo usa <strong>let</strong> cuando sepas que el valor va a cambiar (contadores, acumuladores). Evita <strong>var</strong> — es antiguo y tiene comportamientos raros.</p>
+      </div>
+    </div>
+
+    <div class="cs">
+      <div class="sb2 sp">⚡ Práctica</div>
+      <h2>Ejercicios</h2>
+
+      <div class="eb">
+        <div class="eh">🎯 Ejercicio 1 — Declara variables</div>
+        <div class="ebody">
+          <div class="ed">Declara 3 variables con const: tu nombre, tu edad, y si estudias (true/false). Luego imprímelas con console.log usando template literals.</div>
+          <textarea class="ee" id="e1" placeholder="const nombre = ...&#10;const edad = ...&#10;const estudia = ...&#10;console.log(...)"></textarea>
+          <div class="ea">
+            <button class="btn bto bsm" onclick="run(1)">▶ Ejecutar</button>
+            <button class="btn bto bsm" onclick="hint(1)">Ver pista</button>
+            <button class="btn bto bsm" onclick="aih(1)">🤖 Ayuda IA</button>
+          </div>
+          <div class="console-out" id="co1">// Output aparece aquí...</div>
+          <div class="rm" id="r1"></div>
+        </div>
+      </div>
+
+      <div class="eb">
+        <div class="eh">🎯 Ejercicio 2 — typeof y operaciones</div>
+        <div class="ebody">
+          <div class="ed">Crea una variable número con valor 15, otra con 4. Imprime su suma, resta, multiplicación, división y el tipo de dato con typeof.</div>
+          <textarea class="ee" id="e2" placeholder="const a = ...&#10;const b = ...&#10;console.log(a + b)&#10;..."></textarea>
+          <div class="ea">
+            <button class="btn bto bsm" onclick="run(2)">▶ Ejecutar</button>
+            <button class="btn bto bsm" onclick="hint(2)">Ver pista</button>
+            <button class="btn bto bsm" onclick="aih(2)">🤖 Ayuda IA</button>
+          </div>
+          <div class="console-out" id="co2">// Output aparece aquí...</div>
+          <div class="rm" id="r2"></div>
+        </div>
+      </div>
+
+      <div class="eb">
+        <div class="eh">🎯 Ejercicio 3 — Condicional if/else</div>
+        <div class="ebody">
+          <div class="ed">Crea una variable "nota" con un valor del 0 al 20. Con if/else imprime "Aprobado" si es mayor o igual a 11, o "Desaprobado" si es menor.</div>
+          <textarea class="ee" id="e3" placeholder="const nota = ...&#10;if (nota >= 11) {&#10;  console.log(...)&#10;} else {&#10;  console.log(...)&#10;}"></textarea>
+          <div class="ea">
+            <button class="btn bto bsm" onclick="run(3)">▶ Ejecutar</button>
+            <button class="btn bto bsm" onclick="hint(3)">Ver pista</button>
+            <button class="btn bto bsm" onclick="aih(3)">🤖 Ayuda IA</button>
+          </div>
+          <div class="console-out" id="co3">// Output aparece aquí...</div>
+          <div class="rm" id="r3"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs">
+      <div class="sb2 sq">📝 Test</div>
+      <h2>Test de la lección</h2>
+
+      <div class="qb">
+        <div class="qq">1. ¿Cuál es la diferencia entre const y let?</div>
+        <div class="qo">
+          <button class="qopt" onclick="ans(this,false,'q1')">const es más rápido que let</button>
+          <button class="qopt" onclick="ans(this,true,'q1')">const no puede reasignarse, let sí puede cambiar su valor</button>
+          <button class="qopt" onclick="ans(this,false,'q1')">Son exactamente lo mismo</button>
+          <button class="qopt" onclick="ans(this,false,'q1')">let es más moderno que const</button>
+        </div>
+        <div class="qfb" id="q1fb"></div>
+      </div>
+
+      <div class="qb">
+        <div class="qq">2. ¿Qué imprime este código?<br><code style="font-family:var(--font-mono);font-size:13px;color:var(--accent)">const x = 5; console.log(typeof x);</code></div>
+        <div class="qo">
+          <button class="qopt" onclick="ans(this,false,'q2')">"integer"</button>
+          <button class="qopt" onclick="ans(this,true,'q2')">"number"</button>
+          <button class="qopt" onclick="ans(this,false,'q2')">"5"</button>
+          <button class="qopt" onclick="ans(this,false,'q2')">"const"</button>
+        </div>
+        <div class="qfb" id="q2fb"></div>
+      </div>
+
+      <div class="qb">
+        <div class="qq">3. ¿Cómo se inserta una variable dentro de un template literal?</div>
+        <div class="qo">
+          <button class="qopt" onclick="ans(this,false,'q3')">Con + variable +</button>
+          <button class="qopt" onclick="ans(this,false,'q3')">Con {variable}</button>
+          <button class="qopt" onclick="ans(this,true,'q3')">Con ${variable} dentro de backticks</button>
+          <button class="qopt" onclick="ans(this,false,'q3')">Con (variable)</button>
+        </div>
+        <div class="qfb" id="q3fb"></div>
+      </div>
+
+      <div class="qb">
+        <div class="qq">4. ¿Qué valor tiene "sinDefinir" si se declara con let pero no se le asigna valor?</div>
+        <div class="qo">
+          <button class="qopt" onclick="ans(this,false,'q4')">null</button>
+          <button class="qopt" onclick="ans(this,false,'q4')">0</button>
+          <button class="qopt" onclick="ans(this,false,'q4')">""</button>
+          <button class="qopt" onclick="ans(this,true,'q4')">undefined</button>
+        </div>
+        <div class="qfb" id="q4fb"></div>
+      </div>
+
+      <div class="scb" id="scb"></div>
+    </div>
+
+  </div>
+
+  <div class="nvb">
+    <button class="btn bto" onclick="pl()">← Lección anterior</button>
+    <button class="btn btg" onclick="nl()">Completar y continuar →</button>
+  </div>
+</div>
+
+<script>
+let cur=2, qd={};
+const lns=['¿Qué es JS?','Variables y tipos','Operadores','Condicionales','Funciones','Arrays','Objetos','Bucles','DOM básico','Eventos','Fetch y APIs','Proyecto final'];
+const hints={1:'const nombre = "Tu nombre"; const edad = 20; const estudia = true; console.log(`Me llamo ${nombre}, tengo ${edad} años y estudio: ${estudia}`);',2:'const a = 15; const b = 4; console.log(a+b); console.log(a-b); console.log(a*b); console.log(a/b); console.log(typeof a);',3:'const nota = 14; if (nota >= 11) { console.log("Aprobado"); } else { console.log("Desaprobado"); }'};
+
+function run(n) {
+  const code = document.getElementById('e'+n).value;
+  const out = document.getElementById('co'+n);
+  out.textContent = '';
+  const lines = [];
+  const orig = console.log;
+  console.log = (...args) => lines.push(args.map(a=>typeof a==='object'?JSON.stringify(a):String(a)).join(' '));
+  try {
+    eval(code);
+    console.log = orig;
+    out.textContent = lines.length ? lines.join('\n') : '// (sin output)';
+    out.style.color = '#00ff41';
+    const r=document.getElementById('r'+n);
+    if(lines.length>0){r.style.display='block';r.className='rm rok';r.textContent='✓ Código ejecutado correctamente.';}
+  } catch(e) {
+    console.log = orig;
+    out.textContent = '// Error: ' + e.message;
+    out.style.color = '#f85149';
+    const r=document.getElementById('r'+n);r.style.display='block';r.className='rm rerr';r.textContent='✗ Error: '+e.message;
+  }
+}
+
+function hint(n){const r=document.getElementById('r'+n);r.style.display='block';r.className='rm rai';r.textContent='💡 '+hints[n];}
+
+async function aih(n){
+  const code=document.getElementById('e'+n).value;
+  const r=document.getElementById('r'+n);r.style.display='block';r.className='rm rai';r.textContent='Analizando...';
+  const ds={1:'declarar 3 variables con const (nombre, edad, estudia) e imprimirlas con template literals',2:'crear dos variables numéricas e imprimir suma, resta, multiplicación, división y typeof',3:'crear variable nota y usar if/else para imprimir Aprobado (>=11) o Desaprobado'};
+  try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,messages:[{role:'user',content:`Profesor de JavaScript. Ejercicio: ${ds[n]}.\nCódigo:\n${code||'(vacío)'}\nEn español, 3 líneas: qué está bien, qué falta, pista concreta sin dar solución completa.`}]})});const d=await res.json();r.textContent=d.content?.[0]?.text||'Sin respuesta';}
+  catch(e){r.textContent='Error al conectar con la IA.';}
+}
+
+function ans(btn,correct,qId){
+  btn.closest('.qo').querySelectorAll('.qopt').forEach(b=>b.disabled=true);
+  const fb=document.getElementById(qId+'fb');fb.style.display='block';
+  if(correct){btn.classList.add('correct');fb.className='qfb fbok';fb.textContent='✓ ¡Correcto!';qd[qId]=true;}
+  else{btn.classList.add('wrong');fb.className='qfb fberr';fb.textContent='✗ Incorrecto. Revisa la teoría.';qd[qId]=false;}
+  if(Object.keys(qd).length===4){const s=Object.values(qd).filter(Boolean).length;const b=document.getElementById('scb');b.style.display='block';b.innerHTML=`Resultado: <strong style="color:${s>=3?'var(--accent2)':'#f85149'}">${s}/4 correctas</strong> — ${s===4?'¡Perfecto!':s>=3?'Muy bien.':'Repasa antes de continuar.'}`;}
+}
+
+function gl(n){cur=n;document.querySelectorAll('.li').forEach((el,i)=>{el.classList.remove('active');if(i===n-1)el.classList.add('active');});document.getElementById('mt').textContent=`Lección ${n} — ${lns[n-1]}`;window.scrollTo(0,0);const p=Math.round((n/12)*100);document.getElementById('pf').style.width=p+'%';document.getElementById('pp').textContent=p+'%';}
+function nl(){if(cur<12)gl(cur+1);}
+function pl(){if(cur>1)gl(cur-1);}
+
+async function askAI(){const q=prompt('¿Qué quieres preguntar sobre JavaScript?');if(!q)return;try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:`Profesor de JavaScript. Pregunta: "${q}". Responde en español, simple, máximo 5 líneas.`}]})});const d=await r.json();alert(d.content?.[0]?.text||'Sin respuesta');}catch(e){alert('Error al conectar con la IA');}}
+
+function cp(btn){navigator.clipboard.writeText(btn.closest('.cb').querySelector('pre').innerText);btn.textContent='¡Copiado!';setTimeout(()=>btn.textContent='Copiar',2000);}
+</script>
+</body>
+</html>

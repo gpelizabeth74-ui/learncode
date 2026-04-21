@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Fundamentos — LearnCode</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--muted:#7d8590;--accent:#58a6ff;--accent2:#3fb950;--cl:#79c0ff;--font-mono:'JetBrains Mono',monospace;--font-display:'Syne',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-display);display:flex;min-height:100vh}
+.sidebar{width:260px;background:var(--bg2);border-right:1px solid var(--border);flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-header{padding:16px 20px;border-bottom:1px solid var(--border)}
+.back-btn{color:var(--muted);text-decoration:none;font-size:13px}.back-btn:hover{color:var(--text)}
+.course-name{font-size:14px;font-weight:700;color:var(--cl);margin-top:6px}
+.sidebar-section{padding:12px 20px 4px;font-size:10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.li{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;transition:background .15s;font-size:13px;border-left:2px solid transparent}
+.li:hover{background:var(--bg3)}
+.li.active{background:var(--bg3);border-left-color:var(--cl)}
+.li.done .ln{background:var(--accent2);color:#0e1117}
+.li.active .ln{background:var(--cl);color:#0e1117}
+.ln{width:22px;height:22px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--font-mono);font-weight:700;flex-shrink:0;color:var(--muted)}
+.lname{flex:1;color:var(--muted)}.li.active .lname,.li.done .lname{color:var(--text)}
+.pbw{padding:16px 20px;border-top:1px solid var(--border)}
+.pbl{font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.pb{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.pbf{height:100%;background:var(--cl);border-radius:2px;transition:width .4s}
+.main{flex:1;overflow-y:auto}
+.mh{padding:20px 40px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10}
+.lt{font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.ha{display:flex;gap:10px}
+.btn{padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-display);border:none;transition:all .2s}
+.bto{background:transparent;border:1px solid var(--border);color:var(--text)}.bto:hover{border-color:var(--cl);color:var(--cl)}
+.btp{background:var(--cl);color:#0e1117}
+.btg{background:var(--accent2);color:#0e1117}
+.content{padding:40px;max-width:760px}
+.cs{margin-bottom:48px}
+.sb2{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:20px;font-size:11px;font-family:var(--font-mono);font-weight:700;margin-bottom:16px}
+.st{background:#58a6ff20;color:var(--accent)}.sp{background:#3fb95020;color:var(--accent2)}.sq{background:#e3b34120;color:#e3b341}
+.content h2{font-size:24px;font-weight:800;margin-bottom:16px;letter-spacing:-0.5px}
+.content h3{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--cl)}
+.content p{font-size:14px;line-height:1.8;color:#c9d1d9;font-family:var(--font-mono);margin-bottom:16px}
+.content ul{padding-left:20px;margin-bottom:16px}
+.content ul li{font-size:14px;line-height:2;color:#c9d1d9;font-family:var(--font-mono)}
+.cb{background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:16px 0}
+.cbh{padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:11px;font-family:var(--font-mono);color:var(--muted);display:flex;justify-content:space-between}
+.cpb{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;font-family:var(--font-mono)}.cpb:hover{color:var(--text)}
+.cb pre{padding:16px;font-family:var(--font-mono);font-size:13px;line-height:1.7;overflow-x:auto}
+.pr{color:#79c0ff}.vl{color:#a5d6ff}.sl{color:#7ee787}.cm{color:var(--muted)}.nu{color:#f2cc60}.un{color:#ffa657}
+.eb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:16px 0}
+.eh{padding:12px 16px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.ebody{padding:16px}
+.ed{font-size:13px;color:var(--muted);font-family:var(--font-mono);margin-bottom:12px;line-height:1.6}
+.egrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.elbl{font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-bottom:6px}
+textarea.ee{width:100%;min-height:130px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px;font-family:var(--font-mono);font-size:12px;color:var(--text);resize:vertical;outline:none}
+textarea.ee:focus{border-color:var(--cl)}
+iframe.ep{width:100%;height:130px;border:1px solid var(--border);border-radius:6px;background:white}
+.ea{display:flex;gap:8px;margin-top:10px}
+.bsm{padding:5px 12px;font-size:12px}
+.rm{margin-top:10px;padding:10px 14px;border-radius:6px;font-size:12px;font-family:var(--font-mono);display:none}
+.rok{background:#3fb95015;border:1px solid #3fb95040;color:var(--accent2)}
+.rerr{background:#f8514915;border:1px solid #f8514940;color:#f85149}
+.rai{background:#58a6ff10;border:1px solid #58a6ff30;color:var(--accent)}
+.qb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin:16px 0}
+.qq{font-size:15px;font-weight:700;margin-bottom:16px;line-height:1.5}
+.qo{display:flex;flex-direction:column;gap:8px}
+.qopt{padding:10px 16px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;font-family:var(--font-mono);transition:all .15s;text-align:left;background:transparent;color:var(--text);width:100%}
+.qopt:hover:not(:disabled){border-color:var(--cl);background:#79c0ff10}
+.qopt.correct{border-color:var(--accent2);background:#3fb95020;color:var(--accent2)}
+.qopt.wrong{border-color:#f85149;background:#f8514920;color:#f85149}
+.qfb{margin-top:10px;font-size:13px;font-family:var(--font-mono);display:none;padding:10px;border-radius:6px}
+.fbok{background:#3fb95015;color:var(--accent2);border:1px solid #3fb95040}
+.fberr{background:#f8514915;color:#f85149;border:1px solid #f8514940}
+.nvb{display:flex;justify-content:space-between;padding:40px;border-top:1px solid var(--border);margin-top:20px}
+.ib{background:var(--bg2);border:1px solid #79c0ff30;border-radius:8px;padding:16px;margin:16px 0}
+.ibt{font-size:12px;font-family:var(--font-mono);color:var(--cl);margin-bottom:8px;font-weight:700}
+.scb{margin-top:20px;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-family:var(--font-mono);font-size:13px;display:none}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a href="index.html" class="back-btn">← Volver al inicio</a>
+    <div class="course-name">CSS Fundamentos</div>
+    <div style="font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-top:4px">10 lecciones · 18 ejercicios</div>
+  </div>
+  <div class="sidebar-section">Módulo 1 — Bases</div>
+  <div class="li done" onclick="gl(1)"><div class="ln">✓</div><div class="lname">¿Qué es CSS?</div></div>
+  <div class="li active" onclick="gl(2)"><div class="ln">2</div><div class="lname">Selectores</div></div>
+  <div class="li" onclick="gl(3)"><div class="ln">3</div><div class="lname">Colores y fondos</div></div>
+  <div class="li" onclick="gl(4)"><div class="ln">4</div><div class="lname">Tipografía</div></div>
+  <div class="sidebar-section">Módulo 2 — Layout</div>
+  <div class="li" onclick="gl(5)"><div class="ln">5</div><div class="lname">Box model</div></div>
+  <div class="li" onclick="gl(6)"><div class="ln">6</div><div class="lname">Flexbox</div></div>
+  <div class="li" onclick="gl(7)"><div class="ln">7</div><div class="lname">CSS Grid</div></div>
+  <div class="sidebar-section">Módulo 3 — Avanzado</div>
+  <div class="li" onclick="gl(8)"><div class="ln">8</div><div class="lname">Responsive design</div></div>
+  <div class="li" onclick="gl(9)"><div class="ln">9</div><div class="lname">Animaciones</div></div>
+  <div class="li" onclick="gl(10)"><div class="ln">10</div><div class="lname">Proyecto final</div></div>
+  <div class="pbw">
+    <div class="pbl"><span>Progreso</span><span id="pp">10%</span></div>
+    <div class="pb"><div class="pbf" id="pf" style="width:10%"></div></div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="mh">
+    <div class="lt" id="mt">Lección 2 — Selectores CSS</div>
+    <div class="ha">
+      <button class="btn bto" onclick="askAI()">🤖 Preguntar IA</button>
+      <button class="btn btp" onclick="nl()">Siguiente →</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <div class="cs">
+      <div class="sb2 st">📖 Teoría</div>
+      <h2>Selectores CSS</h2>
+      <p>Los selectores son la forma en que CSS apunta a elementos HTML para aplicarles estilos. Es como decirle al navegador: "aplica este estilo a ESTOS elementos".</p>
+      <div class="cb">
+        <div class="cbh"><span>selectores.css</span><button class="cpb" onclick="cp(this)">Copiar</button></div>
+        <pre><span class="cm">/* Selector de etiqueta — todos los h1 */</span>
+<span class="sl">h1</span> { <span class="pr">color</span>: <span class="vl">blue</span>; <span class="pr">font-size</span>: <span class="nu">32</span><span class="un">px</span>; }
+
+<span class="cm">/* Selector de clase — elements con class="card" */</span>
+<span class="sl">.card</span> { <span class="pr">background</span>: <span class="vl">white</span>; <span class="pr">padding</span>: <span class="nu">20</span><span class="un">px</span>; }
+
+<span class="cm">/* Selector de ID — el elemento con id="header" */</span>
+<span class="sl">#header</span> { <span class="pr">background</span>: <span class="vl">#333</span>; <span class="pr">color</span>: <span class="vl">white</span>; }
+
+<span class="cm">/* Varios elementos a la vez */</span>
+<span class="sl">h1, h2, h3</span> { <span class="pr">font-family</span>: <span class="vl">Arial</span>; }
+
+<span class="cm">/* p que esté DENTRO de .card */</span>
+<span class="sl">.card p</span> { <span class="pr">color</span>: <span class="vl">#666</span>; }
+
+<span class="cm">/* Efecto hover */</span>
+<span class="sl">.btn:hover</span> { <span class="pr">background</span>: <span class="vl">darkblue</span>; }</pre>
+      </div>
+      <h3>¿Cuándo usar cada uno?</h3>
+      <ul>
+        <li><strong>Etiqueta</strong> (h1, p) → cuando quieres afectar todos los elementos de ese tipo</li>
+        <li><strong>Clase (.nombre)</strong> → el más usado, reutilizable en múltiples elementos</li>
+        <li><strong>ID (#nombre)</strong> → para un único elemento especial en la página</li>
+        <li><strong>:hover</strong> → para efectos al pasar el mouse</li>
+      </ul>
+      <div class="ib"><div class="ibt">💡 Regla de oro</div><p>Usa clases casi siempre. Los IDs tienen mayor especificidad y solo puedes usarlos una vez por página.</p></div>
+    </div>
+
+    <div class="cs">
+      <div class="sb2 sp">⚡ Práctica</div>
+      <h2>Ejercicios</h2>
+
+      <div class="eb">
+        <div class="eh">🎯 Ejercicio 1 — Selectores básicos</div>
+        <div class="ebody">
+          <div class="ed">Aplica CSS: h1 en color #264de4, clase .tarjeta con fondo #f0f4ff y padding 20px, y .tarjeta p con color #666.</div>
+          <div class="egrid">
+            <div><div class="elbl">Tu CSS:</div><textarea class="ee" id="e1" oninput="lp(1)" placeholder="h1 { color: ... }&#10;.tarjeta { ... }&#10;.tarjeta p { ... }"></textarea></div>
+            <div><div class="elbl">Preview en vivo:</div><iframe class="ep" id="p1"></iframe></div>
+          </div>
+          <div class="ea">
+            <button class="btn bto bsm" onclick="chk(1)">Verificar</button>
+            <button class="btn bto bsm" onclick="hint(1)">Ver pista</button>
+            <button class="btn bto bsm" onclick="aih(1)">🤖 Ayuda IA</button>
+          </div>
+          <div class="rm" id="r1"></div>
+        </div>
+      </div>
+
+      <div class="eb">
+        <div class="eh">🎯 Ejercicio 2 — Botón con hover</div>
+        <div class="ebody">
+          <div class="ed">Estiliza .btn: fondo #264de4, texto blanco, padding 10px 20px, border-radius 6px, sin borde. Y hover con fondo #1a3bbd.</div>
+          <div class="egrid">
+            <div><div class="elbl">Tu CSS:</div><textarea class="ee" id="e2" oninput="lp(2)" placeholder=".btn { ... }&#10;.btn:hover { ... }"></textarea></div>
+            <div><div class="elbl">Preview en vivo:</div><iframe class="ep" id="p2"></iframe></div>
+          </div>
+          <div class="ea">
+            <button class="btn bto bsm" onclick="chk(2)">Verificar</button>
+            <button class="btn bto bsm" onclick="hint(2)">Ver pista</button>
+            <button class="btn bto bsm" onclick="aih(2)">🤖 Ayuda IA</button>
+          </div>
+          <div class="rm" id="r2"></div>
+        </div>
+      </div>
+
+      <div class="eb">
+        <div class="eh">🎯 Ejercicio 3 — Flexbox</div>
+        <div class="ebody">
+          <div class="ed">Centra horizontal y verticalmente con flexbox el contenido de .caja. Agrega height: 150px y background: #eef2ff.</div>
+          <div class="egrid">
+            <div><div class="elbl">Tu CSS:</div><textarea class="ee" id="e3" oninput="lp(3)" placeholder=".caja {&#10;  display: flex;&#10;  ...&#10;}"></textarea></div>
+            <div><div class="elbl">Preview en vivo:</div><iframe class="ep" id="p3"></iframe></div>
+          </div>
+          <div class="ea">
+            <button class="btn bto bsm" onclick="chk(3)">Verificar</button>
+            <button class="btn bto bsm" onclick="hint(3)">Ver pista</button>
+            <button class="btn bto bsm" onclick="aih(3)">🤖 Ayuda IA</button>
+          </div>
+          <div class="rm" id="r3"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs">
+      <div class="sb2 sq">📝 Test</div>
+      <h2>Test de la lección</h2>
+
+      <div class="qb">
+        <div class="qq">1. ¿Cómo se escribe un selector de clase llamada "card"?</div>
+        <div class="qo">
+          <button class="qopt" onclick="ans(this,false,'q1')">#card</button>
+          <button class="qopt" onclick="ans(this,true,'q1')">.card</button>
+          <button class="qopt" onclick="ans(this,false,'q1')">card</button>
+          <button class="qopt" onclick="ans(this,false,'q1')">*card</button>
+        </div>
+        <div class="qfb" id="q1fb"></div>
+      </div>
+
+      <div class="qb">
+        <div class="qq">2. ¿Qué propiedad CSS se usa para el color de texto?</div>
+        <div class="qo">
+          <button class="qopt" onclick="ans(this,false,'q2')">text-color</button>
+          <button class="qopt" onclick="ans(this,false,'q2')">font-color</button>
+          <button class="qopt" onclick="ans(this,true,'q2')">color</button>
+          <button class="qopt" onclick="ans(this,false,'q2')">foreground</button>
+        </div>
+        <div class="qfb" id="q2fb"></div>
+      </div>
+
+      <div class="qb">
+        <div class="qq">3. ¿Qué selector apunta a los &lt;p&gt; dentro de .card?</div>
+        <div class="qo">
+          <button class="qopt" onclick="ans(this,false,'q3')">p.card</button>
+          <button class="qopt" onclick="ans(this,true,'q3')">.card p</button>
+          <button class="qopt" onclick="ans(this,false,'q3')">card > p</button>
+          <button class="qopt" onclick="ans(this,false,'q3')">p #card</button>
+        </div>
+        <div class="qfb" id="q3fb"></div>
+      </div>
+
+      <div class="qb">
+        <div class="qq">4. ¿Qué propiedades usa flexbox para centrar en ambos ejes?</div>
+        <div class="qo">
+          <button class="qopt" onclick="ans(this,false,'q4')">align: center</button>
+          <button class="qopt" onclick="ans(this,false,'q4')">text-align: center</button>
+          <button class="qopt" onclick="ans(this,true,'q4')">justify-content: center + align-items: center</button>
+          <button class="qopt" onclick="ans(this,false,'q4')">flex-align: both</button>
+        </div>
+        <div class="qfb" id="q4fb"></div>
+      </div>
+
+      <div class="scb" id="scb"></div>
+    </div>
+  </div>
+
+  <div class="nvb">
+    <button class="btn bto" onclick="pl()">← Lección anterior</button>
+    <button class="btn btg" onclick="nl()">Completar y continuar →</button>
+  </div>
+</div>
+
+<script>
+let cur=2, qd={};
+const lns=['¿Qué es CSS?','Selectores CSS','Colores y fondos','Tipografía','Box model','Flexbox','CSS Grid','Responsive design','Animaciones','Proyecto final'];
+const html={1:`<div class="tarjeta"><h1>Título</h1><p>Párrafo dentro de la tarjeta.</p></div>`,2:`<button class="btn">Haz clic aquí</button>`,3:`<div class="caja"><p>Centrado con Flex</p></div>`};
+const hints={1:'h1 { color: #264de4; } .tarjeta { background: #f0f4ff; padding: 20px; } .tarjeta p { color: #666; }',2:'.btn { background: #264de4; color: white; padding: 10px 20px; border-radius: 6px; border: none; } .btn:hover { background: #1a3bbd; }',3:'.caja { display: flex; justify-content: center; align-items: center; height: 150px; background: #eef2ff; }'};
+
+function lp(n){
+  const css=document.getElementById('e'+n).value;
+  const f=document.getElementById('p'+n);
+  const d=f.contentDocument||f.contentWindow.document;
+  d.open();d.write(`<html><head><style>body{margin:0;padding:8px;font-family:Arial}${css}</style></head><body>${html[n]}</body></html>`);d.close();
+}
+
+function chk(n){
+  const css=document.getElementById('e'+n).value.toLowerCase().replace(/\s/g,'');
+  const r=document.getElementById('r'+n);
+  r.style.display='block';
+  const ok={1:css.includes('h1')&&css.includes('color')&&css.includes('.tarjeta')&&css.includes('padding'),2:css.includes('.btn')&&css.includes('background')&&css.includes('.btn:hover'),3:css.includes('display:flex')&&css.includes('justify-content:center')&&css.includes('align-items:center')};
+  if(ok[n]){r.className='rm rok';r.textContent='✓ ¡Correcto! Muy bien.';}
+  else{r.className='rm rerr';r.textContent='✗ Revisa tu código. Usa "Ver pista" si necesitas ayuda.';}
+}
+
+function hint(n){const r=document.getElementById('r'+n);r.style.display='block';r.className='rm rai';r.textContent='💡 '+hints[n];}
+
+async function aih(n){
+  const css=document.getElementById('e'+n).value;
+  const r=document.getElementById('r'+n);
+  r.style.display='block';r.className='rm rai';r.textContent='Analizando...';
+  const ds={1:'poner h1 en color #264de4, .tarjeta con fondo #f0f4ff y padding 20px, .tarjeta p con color #666',2:'estilizar .btn con fondo #264de4, texto blanco, padding 10px 20px, border-radius 6px, hover con #1a3bbd',3:'centrar con flexbox .caja con height 150px y background #eef2ff'};
+  try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,messages:[{role:'user',content:`Profesor de CSS. Ejercicio: ${ds[n]}.\nCódigo:\n${css||'(vacío)'}\nEn español, 3 líneas: qué está bien, qué falta, pista concreta sin dar solución completa.`}]})});const d=await res.json();r.textContent=d.content?.[0]?.text||'Sin respuesta';}
+  catch(e){r.textContent='Error al conectar con la IA.';}
+}
+
+function ans(btn,correct,qId){
+  btn.closest('.qo').querySelectorAll('.qopt').forEach(b=>b.disabled=true);
+  const fb=document.getElementById(qId+'fb');fb.style.display='block';
+  if(correct){btn.classList.add('correct');fb.className='qfb fbok';fb.textContent='✓ ¡Correcto!';qd[qId]=true;}
+  else{btn.classList.add('wrong');fb.className='qfb fberr';fb.textContent='✗ Incorrecto. Revisa la teoría.';qd[qId]=false;}
+  if(Object.keys(qd).length===4){const s=Object.values(qd).filter(Boolean).length;const b=document.getElementById('scb');b.style.display='block';b.innerHTML=`Resultado: <strong style="color:${s>=3?'var(--accent2)':'#f85149'}">${s}/4 correctas</strong> — ${s===4?'¡Perfecto!':s>=3?'Muy bien.':'Repasa antes de continuar.'}`;}
+}
+
+function gl(n){cur=n;document.querySelectorAll('.li').forEach((el,i)=>{el.classList.remove('active');if(i===n-1)el.classList.add('active');});document.getElementById('mt').textContent=`Lección ${n} — ${lns[n-1]}`;window.scrollTo(0,0);const p=Math.round((n/10)*100);document.getElementById('pf').style.width=p+'%';document.getElementById('pp').textContent=p+'%';}
+function nl(){if(cur<10)gl(cur+1);}
+function pl(){if(cur>1)gl(cur-1);}
+
+async function askAI(){const q=prompt('¿Qué quieres preguntar sobre CSS?');if(!q)return;try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:`Profesor de CSS. Pregunta: "${q}". Responde en español, simple, máximo 5 líneas.`}]})});const d=await r.json();alert(d.content?.[0]?.text||'Sin respuesta');}catch(e){alert('Error al conectar con la IA');}}
+
+function cp(btn){navigator.clipboard.writeText(btn.closest('.cb').querySelector('pre').innerText);btn.textContent='¡Copiado!';setTimeout(()=>btn.textContent='Copiar',2000);}
+
+setTimeout(()=>{[1,2,3].forEach(n=>{const f=document.getElementById('p'+n);const d=f.contentDocument||f.contentWindow.document;d.open();d.write(`<html><head><style>body{margin:0;padding:8px;font-family:Arial;color:#333}</style></head><body>${html[n]}</body></html>`);d.close();});},200);
+</script>
+</body>
+</html>
