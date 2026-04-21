@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playground — LearnCode</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--muted:#7d8590;--accent:#58a6ff;--accent2:#3fb950;--html:#e34c26;--css:#264de4;--js:#f7df1e;--font-mono:'JetBrains Mono',monospace;--font-display:'Syne',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-display);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:52px;border-bottom:1px solid var(--border);flex-shrink:0}
+.logo{font-size:18px;font-weight:800}.logo span{color:var(--accent)}
+.nav-center{display:flex;gap:4px}
+.lang-tab{padding:5px 14px;border-radius:6px;font-size:12px;font-weight:700;font-family:var(--font-mono);cursor:pointer;border:1px solid transparent;transition:all .15s;background:transparent;color:var(--muted)}
+.lang-tab:hover{background:var(--bg3)}
+.lang-tab.active-html{background:#e34c2620;color:var(--html);border-color:#e34c2640}
+.lang-tab.active-css{background:#264de420;color:var(--css);border-color:#264de440}
+.lang-tab.active-js{background:#f7df1e20;color:var(--js);border-color:#f7df1e40}
+.lang-tab.active-py{background:#3fb95020;color:var(--accent2);border-color:#3fb95040}
+.lang-tab.active-sql{background:#58a6ff20;color:var(--accent);border-color:#58a6ff40}
+.nav-right{display:flex;gap:8px;align-items:center}
+.btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-display);border:none;transition:all .2s}
+.btn-run{background:var(--accent2);color:#0e1117}
+.btn-run:hover{opacity:.9}
+.btn-ai{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
+.btn-ai:hover{border-color:var(--accent);color:var(--accent)}
+.btn-clear{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-clear:hover{color:var(--text)}
+.back-link{color:var(--muted);text-decoration:none;font-size:12px;font-family:var(--font-mono)}
+.back-link:hover{color:var(--text)}
+
+.workspace{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden}
+.editor-pane{display:flex;flex-direction:column;border-right:1px solid var(--border)}
+.pane-header{padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:11px;font-family:var(--font-mono);color:var(--muted);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.status-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px}
+textarea{flex:1;width:100%;padding:16px;font-family:var(--font-mono);font-size:13px;background:var(--bg);color:var(--text);border:none;resize:none;outline:none;line-height:1.7;tab-size:2}
+.output-pane{display:flex;flex-direction:column}
+.output-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0}
+.out-tab{padding:8px 16px;font-size:11px;font-family:var(--font-mono);color:var(--muted);cursor:pointer;border-right:1px solid var(--border);border-bottom:2px solid transparent}
+.out-tab.active{color:var(--text);border-bottom-color:var(--accent)}
+.output-content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+iframe{flex:1;border:none;background:white}
+.console-out{flex:1;padding:16px;font-family:var(--font-mono);font-size:13px;overflow-y:auto;line-height:1.7;white-space:pre-wrap;word-break:break-all}
+.console-line{margin-bottom:2px}
+.console-ok{color:var(--text)}
+.console-err{color:#f85149}
+.console-info{color:var(--accent)}
+.console-empty{color:var(--muted);font-style:italic}
+
+.ai-pane{border-top:1px solid var(--border);max-height:220px;display:flex;flex-direction:column;flex-shrink:0}
+.ai-header{padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:11px;font-family:var(--font-mono);color:var(--accent);display:flex;align-items:center;gap:6px;flex-shrink:0}
+.ai-content{flex:1;padding:14px;font-size:12px;font-family:var(--font-mono);color:var(--muted);overflow-y:auto;line-height:1.7;white-space:pre-wrap}
+
+.line-nums{padding:16px 8px 16px 0;font-family:var(--font-mono);font-size:13px;color:var(--muted);text-align:right;background:var(--bg);line-height:1.7;user-select:none;min-width:36px;opacity:.4}
+.editor-inner{display:flex;flex:1;overflow:hidden}
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="index.html" class="back-link">← Inicio</a>
+    <div class="logo">Learn<span>Code</span> <span style="font-size:12px;color:var(--muted);font-family:var(--font-mono)">/ playground</span></div>
+  </div>
+  <div class="nav-center">
+    <button class="lang-tab active-html" onclick="setLang('html')">HTML</button>
+    <button class="lang-tab" onclick="setLang('css')">CSS</button>
+    <button class="lang-tab" onclick="setLang('js')">JavaScript</button>
+    <button class="lang-tab" onclick="setLang('py')">Python*</button>
+    <button class="lang-tab" onclick="setLang('sql')">SQL*</button>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-clear" onclick="clearEditor()">Limpiar</button>
+    <button class="btn btn-ai" onclick="reviewWithAI()">🤖 Revisar</button>
+    <button class="btn btn-run" id="run-btn" onclick="runCode()">▶ Ejecutar</button>
+  </div>
+</nav>
+
+<div class="workspace">
+  <div class="editor-pane">
+    <div class="pane-header">
+      <span><span class="status-dot" id="status-dot" style="background:var(--accent2)"></span><span id="file-label">index.html</span></span>
+      <span id="char-count">0 caracteres</span>
+    </div>
+    <div class="editor-inner">
+      <div class="line-nums" id="line-nums">1</div>
+      <textarea id="editor" spellcheck="false" oninput="updateEditor()" onkeydown="handleTab(event)" placeholder="Escribe tu código aquí..."></textarea>
+    </div>
+  </div>
+
+  <div class="output-pane">
+    <div class="output-tabs">
+      <div class="out-tab active" onclick="showTab('preview')">Preview</div>
+      <div class="out-tab" onclick="showTab('console')">Consola</div>
+    </div>
+    <div class="output-content">
+      <iframe id="preview-frame"></iframe>
+      <div class="console-out" id="console-out" style="display:none">
+        <div class="console-empty">El output aparecerá aquí al ejecutar...</div>
+      </div>
+    </div>
+    <div class="ai-pane">
+      <div class="ai-header">🤖 Análisis de IA <span style="color:var(--muted);margin-left:auto">Haz clic en "Revisar"</span></div>
+      <div class="ai-content" id="ai-content">La IA analizará tu código y te dirá si está correcto, qué hace, y cómo mejorarlo.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const examples = {
+  html:`<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi página</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; background: #f5f5f5; }
+    h1 { color: #e34c26; }
+    .card { background: white; padding: 20px; border-radius: 8px; margin-top: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+  </style>
+</head>
+<body>
+  <h1>Hola desde LearnCode</h1>
+  <div class="card">
+    <h2>Mi primera página</h2>
+    <p>Estoy aprendiendo HTML con la IA que me ayuda a mejorar.</p>
+  </div>
+</body>
+</html>`,
+  css:`/* CSS - Estilos */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  text-align: center;
+  max-width: 400px;
+}
+
+.card h1 {
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.btn {
+  background: #667eea;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}`,
+  js:`// JavaScript
+const nombres = ["Ana", "Luis", "María", "Pedro"];
+
+// Función para saludar
+function saludar(nombre) {
+  return \`¡Hola, \${nombre}! Bienvenido a LearnCode.\`;
+}
+
+// Recorrer el array
+nombres.forEach(nombre => {
+  console.log(saludar(nombre));
+});
+
+// Función de suma
+const suma = (a, b) => a + b;
+console.log("Suma de 10 + 5:", suma(10, 5));
+
+// Array methods
+const mayores = [15, 22, 8, 31, 19].filter(n => n >= 18);
+console.log("Mayores de 18:", mayores);`,
+  py:`# Python
+# (Nota: Python no ejecuta en el navegador directamente.
+# La IA puede analizar y corregir tu código.)
+
+nombres = ["Ana", "Luis", "María", "Pedro"]
+
+def saludar(nombre):
+    return f"¡Hola, {nombre}! Bienvenido a LearnCode."
+
+for nombre in nombres:
+    print(saludar(nombre))
+
+# Función de suma
+suma = lambda a, b: a + b
+print(f"Suma: {suma(10, 5)}")
+
+# List comprehension
+mayores = [n for n in [15, 22, 8, 31, 19] if n >= 18]
+print(f"Mayores de 18: {mayores}")`,
+  sql:`-- SQL (modo análisis con IA)
+-- Crea una tabla de usuarios
+
+CREATE TABLE usuarios (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  edad INT,
+  ciudad VARCHAR(100),
+  fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insertar datos
+INSERT INTO usuarios (nombre, email, edad, ciudad)
+VALUES 
+  ('Ana García', 'ana@email.com', 25, 'Lima'),
+  ('Luis Pérez', 'luis@email.com', 30, 'Arequipa'),
+  ('María López', 'maria@email.com', 22, 'Lima');
+
+-- Consultar
+SELECT nombre, edad, ciudad
+FROM usuarios
+WHERE ciudad = 'Lima'
+ORDER BY nombre ASC;`
+};
+
+const fileLabels = {html:'index.html', css:'styles.css', js:'app.js', py:'main.py', sql:'query.sql'};
+const langNames = {html:'HTML', css:'CSS', js:'JavaScript', py:'Python', sql:'SQL'};
+let currentLang = 'html';
+let activeTab = 'preview';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-tab').forEach(b => b.className = 'lang-tab');
+  event.target.className = `lang-tab active-${lang}`;
+  document.getElementById('editor').value = examples[lang];
+  document.getElementById('file-label').textContent = fileLabels[lang];
+  updateEditor();
+  document.getElementById('ai-content').textContent = 'La IA analizará tu código y te dirá si está correcto, qué hace, y cómo mejorarlo.';
+
+  const runBtn = document.getElementById('run-btn');
+  if(lang === 'html' || lang === 'js') {
+    runBtn.style.opacity = '1';
+    runBtn.disabled = false;
+  } else {
+    runBtn.style.opacity = '.5';
+    runBtn.disabled = true;
+  }
+
+  if(lang === 'css') runCode();
+}
+
+function runCode() {
+  const code = document.getElementById('editor').value;
+  if(currentLang === 'html') {
+    showTab('preview');
+    const frame = document.getElementById('preview-frame');
+    const doc = frame.contentDocument || frame.contentWindow.document;
+    doc.open(); doc.write(code); doc.close();
+  } else if(currentLang === 'css') {
+    showTab('preview');
+    const frame = document.getElementById('preview-frame');
+    const doc = frame.contentDocument || frame.contentWindow.document;
+    doc.open();
+    doc.write(`<html><head><style>${code}</style></head><body><div class="card"><h1>Ejemplo CSS</h1><p>Tu CSS aplicado aquí</p><button class="btn">Botón</button></div></body></html>`);
+    doc.close();
+  } else if(currentLang === 'js') {
+    showTab('console');
+    const consoleOut = document.getElementById('console-out');
+    consoleOut.innerHTML = '';
+    const lines = [];
+    const orig = console.log;
+    console.log = (...args) => lines.push({type:'ok', text: args.map(a => typeof a==='object'?JSON.stringify(a,null,2):String(a)).join(' ')});
+    try {
+      eval(code);
+      console.log = orig;
+      if(lines.length === 0) lines.push({type:'info', text:'(sin output)'});
+      lines.forEach(l => {
+        const div = document.createElement('div');
+        div.className = `console-line console-${l.type}`;
+        div.textContent = '> ' + l.text;
+        consoleOut.appendChild(div);
+      });
+    } catch(e) {
+      console.log = orig;
+      const div = document.createElement('div');
+      div.className = 'console-line console-err';
+      div.textContent = '✗ Error: ' + e.message;
+      consoleOut.appendChild(div);
+    }
+  }
+}
+
+function showTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.out-tab').forEach((t,i) => t.classList.toggle('active', i===(tab==='preview'?0:1)));
+  document.getElementById('preview-frame').style.display = tab==='preview'?'flex':'none';
+  document.getElementById('console-out').style.display = tab==='console'?'flex':'none';
+}
+
+async function reviewWithAI() {
+  const code = document.getElementById('editor').value.trim();
+  if(!code){alert('Escribe código primero');return;}
+  const aiContent = document.getElementById('ai-content');
+  aiContent.textContent = 'Analizando tu código...';
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:600,
+        messages:[{role:'user',content:`Analiza este código ${langNames[currentLang]} y responde en español:\n1. ¿Está correcto?\n2. ¿Qué hace?\n3. Errores o mejoras\n4. Un consejo\n\nSé conciso.\n\n${code}`}]
+      })
+    });
+    const data = await resp.json();
+    aiContent.textContent = data.content?.[0]?.text || 'Sin respuesta';
+  } catch(e) {
+    aiContent.textContent = 'Error al conectar con la IA.';
+  }
+}
+
+function clearEditor() {
+  document.getElementById('editor').value = '';
+  updateEditor();
+  document.getElementById('preview-frame').srcdoc = '';
+  document.getElementById('console-out').innerHTML = '<div class="console-empty">El output aparecerá aquí al ejecutar...</div>';
+  document.getElementById('ai-content').textContent = 'La IA analizará tu código y te dirá si está correcto, qué hace, y cómo mejorarlo.';
+}
+
+function updateEditor() {
+  const val = document.getElementById('editor').value;
+  const lines = val.split('\n').length;
+  document.getElementById('line-nums').textContent = Array.from({length:lines},(_,i)=>i+1).join('\n');
+  document.getElementById('char-count').textContent = val.length + ' caracteres';
+}
+
+function handleTab(e) {
+  if(e.key === 'Tab') {
+    e.preventDefault();
+    const ta = e.target;
+    const start = ta.selectionStart;
+    ta.value = ta.value.substring(0,start) + '  ' + ta.value.substring(ta.selectionEnd);
+    ta.selectionStart = ta.selectionEnd = start + 2;
+    updateEditor();
+  }
+}
+
+setLang('html');
+setTimeout(runCode, 100);
+</script>
+</body>
+</html>
