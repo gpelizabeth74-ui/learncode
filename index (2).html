@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnCode — Aprende a programar</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--muted:#7d8590;--accent:#58a6ff;--accent2:#3fb950;--accent3:#f78166;--accent4:#e3b341;--html:#e34c26;--css:#264de4;--js:#f7df1e;--font-mono:'JetBrains Mono',monospace;--font-display:'Syne',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-display);min-height:100vh;overflow-x:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
+.logo{font-size:20px;font-weight:800;letter-spacing:-0.5px}.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:1.5rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;transition:color .2s}.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.btn{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-display);transition:all .2s;border:none}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--accent);color:#0e1117}.btn-primary:hover{background:#79c0ff}
+.btn-danger{background:transparent;border:1px solid var(--border);color:var(--accent3)}.btn-danger:hover{border-color:var(--accent3)}
+.user-info{display:flex;align-items:center;gap:10px}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#0e1117;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:var(--font-mono)}
+.user-name{font-size:13px;font-weight:600;color:var(--text)}
+
+/* HERO */
+.hero{padding:80px 2rem 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:var(--font-mono);color:var(--accent2);margin-bottom:20px}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:52px;font-weight:800;line-height:1.1;letter-spacing:-2px;margin-bottom:20px}
+.hero h1 .hl{color:var(--accent)}
+.hero p{color:var(--muted);font-size:16px;line-height:1.7;margin-bottom:32px;font-family:var(--font-mono)}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-lg{padding:12px 24px;font-size:15px;border-radius:8px}
+.code-preview{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.code-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg3)}
+.code-tab{padding:8px 16px;font-size:12px;font-family:var(--font-mono);color:var(--muted);cursor:pointer;border-right:1px solid var(--border)}
+.code-tab.active{color:var(--text);background:var(--bg2)}
+.code-tab .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.code-body{padding:20px;font-family:var(--font-mono);font-size:13px;line-height:1.8;min-height:180px}
+.kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.cm{color:var(--muted)}.tag{color:#7ee787}.attr{color:#79c0ff}
+
+/* STATS */
+.stats{display:flex;gap:2rem;padding:40px 2rem 60px;max-width:1100px;margin:0 auto;border-top:1px solid var(--border)}
+.stat{text-align:center;flex:1}
+.stat-num{font-size:32px;font-weight:800;color:var(--accent);font-family:var(--font-mono)}
+.stat-label{font-size:13px;color:var(--muted);margin-top:4px}
+
+/* DASHBOARD (visible cuando hay sesión) */
+.dashboard{max-width:1100px;margin:0 auto;padding:40px 2rem;display:none}
+.dash-title{font-size:24px;font-weight:800;margin-bottom:8px;letter-spacing:-0.5px}
+.dash-sub{font-size:13px;font-family:var(--font-mono);color:var(--muted);margin-bottom:32px}
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px}
+.dash-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.dash-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.dash-lang{font-size:13px;font-weight:700;font-family:var(--font-mono)}
+.dash-pct{font-size:22px;font-weight:800;font-family:var(--font-mono)}
+.dash-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.dash-fill{height:100%;border-radius:3px;transition:width .6s}
+.dash-info{font-size:12px;font-family:var(--font-mono);color:var(--muted)}
+.dash-btn{display:block;text-align:center;margin-top:12px;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;color:var(--text);transition:all .2s}
+.dash-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* CURSOS */
+.section{max-width:1100px;margin:0 auto;padding:0 2rem 60px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+.section-title{font-size:28px;font-weight:800;letter-spacing:-1px}.section-title span{color:var(--accent)}
+.courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.course-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .25s;text-decoration:none;display:block}
+.course-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.card-top{padding:24px 24px 0;position:relative}
+.card-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:16px;font-family:var(--font-mono);font-weight:700}
+.icon-html{background:#e34c2620;color:var(--html)}.icon-css{background:#264de420;color:#79c0ff}.icon-js{background:#f7df1e20;color:var(--js)}
+.card-lang{font-size:11px;font-family:var(--font-mono);color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.card-title{font-size:18px;font-weight:700;margin-bottom:8px;letter-spacing:-0.5px}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.6;font-family:var(--font-mono)}
+.card-arrow{opacity:0;transform:translateX(-4px);transition:all .2s;position:absolute;top:24px;right:24px;color:var(--accent);font-size:18px}
+.course-card:hover .card-arrow{opacity:1;transform:translateX(0)}
+.card-bottom{padding:16px 24px;border-top:1px solid var(--border);margin-top:20px;display:flex;align-items:center;justify-content:space-between}
+.card-meta{display:flex;gap:12px}
+.meta-item{display:flex;align-items:center;gap:4px;font-size:12px;font-family:var(--font-mono);color:var(--muted)}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;font-family:var(--font-mono)}
+.badge-beginner{background:#3fb95020;color:var(--accent2)}.badge-inter{background:#58a6ff20;color:var(--accent)}
+.card-progress{margin-top:0}
+.cp-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px}
+.cp-fill{height:100%;border-radius:2px;transition:width .4s}
+
+/* PATH */
+.path{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:40px;margin-bottom:60px}
+.path-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.path-step{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+.path-step:not(:last-child)::after{content:'';position:absolute;top:20px;left:60%;width:80%;height:2px;background:var(--border);z-index:0}
+.step-circle{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:var(--font-mono);margin-bottom:12px;position:relative;z-index:1;border:2px solid var(--border)}
+.s1{background:#e34c2620;border-color:var(--html);color:var(--html)}.s2{background:#264de420;border-color:#79c0ff;color:#79c0ff}.s3{background:#f7df1e20;border-color:var(--js);color:var(--js)}.s4{background:#58a6ff20;border-color:var(--accent);color:var(--accent)}
+.step-name{font-size:13px;font-weight:700;margin-bottom:4px}.step-desc{font-size:11px;color:var(--muted);font-family:var(--font-mono);line-height:1.4}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px}
+.feature{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px}
+.feature-icon{font-size:28px;margin-bottom:14px;font-family:var(--font-mono)}
+.feature-title{font-size:15px;font-weight:700;margin-bottom:8px}
+.feature-desc{font-size:13px;color:var(--muted);line-height:1.6;font-family:var(--font-mono)}
+
+/* CTA */
+.cta{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:60px 40px;text-align:center;margin-bottom:60px}
+.cta h2{font-size:36px;font-weight:800;letter-spacing:-1px;margin-bottom:12px}.cta h2 span{color:var(--accent)}
+.cta p{color:var(--muted);font-family:var(--font-mono);font-size:14px;margin-bottom:28px}
+
+footer{border-top:1px solid var(--border);padding:24px 2rem;display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto}
+.footer-logo{font-size:16px;font-weight:800}.footer-logo span{color:var(--accent)}
+.footer-text{font-size:12px;color:var(--muted);font-family:var(--font-mono)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:40px;max-width:400px;width:90%;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}.modal-close:hover{color:var(--text)}
+.modal h3{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:-0.5px}
+.modal-sub{font-size:13px;font-family:var(--font-mono);color:var(--muted);margin-bottom:24px}
+.modal-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.modal-tab{flex:1;padding:8px;font-size:13px;font-weight:600;text-align:center;cursor:pointer;background:transparent;border:none;color:var(--muted);font-family:var(--font-display);transition:all .2s}
+.modal-tab.active{background:var(--accent);color:#0e1117}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-family:var(--font-mono);color:var(--muted);margin-bottom:6px;display:block}
+.form-input{width:100%;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;font-family:var(--font-mono);outline:none;transition:border .2s}
+.form-input:focus{border-color:var(--accent)}
+.form-btn{width:100%;padding:12px;background:var(--accent);color:#0e1117;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-display);transition:all .2s;margin-top:8px}
+.form-btn:hover{background:#79c0ff}
+.form-error{font-size:12px;font-family:var(--font-mono);color:var(--accent3);margin-top:8px;display:none;padding:8px 12px;background:#f7816620;border-radius:6px;border:1px solid #f7816640}
+.form-success{font-size:12px;font-family:var(--font-mono);color:var(--accent2);margin-top:8px;display:none;padding:8px 12px;background:#3fb95020;border-radius:6px;border:1px solid #3fb95040}
+
+@media(max-width:768px){.hero{grid-template-columns:1fr;gap:40px}.courses-grid,.features-grid,.dash-grid{grid-template-columns:1fr}.path-steps{grid-template-columns:repeat(2,1fr)}.path-step::after{display:none}.stats{flex-wrap:wrap}.hero h1{font-size:36px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Learn<span>Code</span></div>
+  <ul class="nav-links">
+    <li><a href="#cursos">Cursos</a></li>
+    <li><a href="#ruta">Ruta</a></li>
+    <li><a href="playground.html">Playground</a></li>
+  </ul>
+  <div class="nav-right" id="nav-right">
+    <button class="btn btn-ghost" onclick="openModal('login')">Iniciar sesión</button>
+    <button class="btn btn-primary" onclick="openModal('register')">Empezar gratis</button>
+  </div>
+</nav>
+
+<!-- HERO (visible sin sesión) -->
+<section class="hero" id="hero-section">
+  <div>
+    <div class="hero-badge">✦ Plataforma de aprendizaje activa</div>
+    <h1>Aprende a<br>programar<br><span class="hl">de verdad.</span></h1>
+    <p>Teoría, práctica, ejercicios y tests.<br>Con IA que corrige tu código.<br>Gratis. En español.</p>
+    <div class="hero-btns">
+      <button class="btn btn-primary btn-lg" onclick="openModal('register')">Comenzar ahora →</button>
+      <a href="playground.html" class="btn btn-ghost btn-lg">Ver playground</a>
+    </div>
+  </div>
+  <div class="code-preview">
+    <div class="code-tabs">
+      <div class="code-tab active"><span class="dot" style="background:var(--html)"></span>index.html</div>
+      <div class="code-tab"><span class="dot" style="background:#79c0ff"></span>style.css</div>
+      <div class="code-tab"><span class="dot" style="background:var(--js)"></span>app.js</div>
+    </div>
+    <div class="code-body">
+      <div><span class="cm">&lt;!-- Mi primera página --&gt;</span></div>
+      <div><span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="str">"es"</span><span class="tag">&gt;</span></div>
+      <div><span class="tag">&lt;body&gt;</span></div>
+      <div>&nbsp;&nbsp;<span class="tag">&lt;h1&gt;</span>Hola, mundo<span class="tag">&lt;/h1&gt;</span></div>
+      <div><span class="tag">&lt;/body&gt;</span></div>
+      <div><span class="tag">&lt;/html&gt;</span></div>
+      <div style="margin-top:8px"><span class="cm">// ✓ Código correcto!</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD (visible con sesión) -->
+<div class="dashboard" id="dashboard">
+  <div class="dash-title" id="dash-welcome">Bienvenida de vuelta 👋</div>
+  <div class="dash-sub">Continúa donde lo dejaste</div>
+  <div class="dash-grid">
+    <div class="dash-card">
+      <div class="dash-card-top">
+        <div class="dash-lang" style="color:var(--html)">HTML</div>
+        <div class="dash-pct" id="html-pct" style="color:var(--html)">0%</div>
+      </div>
+      <div class="dash-bar"><div class="dash-fill" id="html-bar" style="background:var(--html);width:0%"></div></div>
+      <div class="dash-info" id="html-info">0 de 8 lecciones completadas</div>
+      <a href="curso-html.html" class="dash-btn">Continuar →</a>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-top">
+        <div class="dash-lang" style="color:#79c0ff">CSS</div>
+        <div class="dash-pct" id="css-pct" style="color:#79c0ff">0%</div>
+      </div>
+      <div class="dash-bar"><div class="dash-fill" id="css-bar" style="background:#79c0ff;width:0%"></div></div>
+      <div class="dash-info" id="css-info">0 de 10 lecciones completadas</div>
+      <a href="curso-css.html" class="dash-btn">Continuar →</a>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-top">
+        <div class="dash-lang" style="color:var(--js)">JavaScript</div>
+        <div class="dash-pct" id="js-pct" style="color:var(--js)">0%</div>
+      </div>
+      <div class="dash-bar"><div class="dash-fill" id="js-bar" style="background:var(--js);width:0%"></div></div>
+      <div class="dash-info" id="js-info">0 de 12 lecciones completadas</div>
+      <a href="curso-js.html" class="dash-btn">Continuar →</a>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">3</div><div class="stat-label">Lenguajes disponibles</div></div>
+  <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Ejercicios prácticos</div></div>
+  <div class="stat"><div class="stat-num">IA</div><div class="stat-label">Corrección en tiempo real</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratis</div></div>
+</div>
+
+<section class="section" id="cursos">
+  <div class="section-header">
+    <h2 class="section-title">Cursos <span>disponibles</span></h2>
+  </div>
+  <div class="courses-grid">
+    <a href="curso-html.html" class="course-card">
+      <div class="card-top">
+        <div class="card-icon icon-html">HTML</div>
+        <div class="card-lang">Lenguaje de marcado</div>
+        <div class="card-title">HTML Fundamentos</div>
+        <div class="card-desc">Aprende a estructurar páginas web desde cero.</div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-meta"><div class="meta-item">📚 8 lecciones</div><div class="meta-item">⚡ 15 ejercicios</div></div>
+        <span class="badge badge-beginner">Principiante</span>
+      </div>
+      <div class="card-progress" style="padding:0 24px 16px">
+        <div class="cp-bar"><div class="cp-fill" id="card-html-bar" style="background:var(--html);width:0%"></div></div>
+      </div>
+    </a>
+    <a href="curso-css.html" class="course-card">
+      <div class="card-top">
+        <div class="card-icon icon-css">CSS</div>
+        <div class="card-lang">Hojas de estilo</div>
+        <div class="card-title">CSS Fundamentos</div>
+        <div class="card-desc">Diseño, colores, flexbox, grid y responsive.</div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-meta"><div class="meta-item">📚 10 lecciones</div><div class="meta-item">⚡ 18 ejercicios</div></div>
+        <span class="badge badge-beginner">Principiante</span>
+      </div>
+      <div class="card-progress" style="padding:0 24px 16px">
+        <div class="cp-bar"><div class="cp-fill" id="card-css-bar" style="background:#79c0ff;width:0%"></div></div>
+      </div>
+    </a>
+    <a href="curso-js.html" class="course-card">
+      <div class="card-top">
+        <div class="card-icon icon-js">JS</div>
+        <div class="card-lang">Programación</div>
+        <div class="card-title">JavaScript Fundamentos</div>
+        <div class="card-desc">Variables, funciones, arrays, DOM y eventos.</div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-meta"><div class="meta-item">📚 12 lecciones</div><div class="meta-item">⚡ 20 ejercicios</div></div>
+        <span class="badge badge-inter">Intermedio</span>
+      </div>
+      <div class="card-progress" style="padding:0 24px 16px">
+        <div class="cp-bar"><div class="cp-fill" id="card-js-bar" style="background:var(--js);width:0%"></div></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="section" id="ruta">
+  <h2 class="section-title" style="margin-bottom:8px">Tu <span>ruta de aprendizaje</span></h2>
+  <p style="color:var(--muted);font-family:var(--font-mono);font-size:13px;margin-bottom:32px">Sigue este orden para aprender de forma progresiva</p>
+  <div class="path">
+    <div class="path-steps">
+      <div class="path-step"><div class="step-circle s1">01</div><div class="step-name">HTML</div><div class="step-desc">Estructura</div></div>
+      <div class="path-step"><div class="step-circle s2">02</div><div class="step-name">CSS</div><div class="step-desc">Diseño</div></div>
+      <div class="path-step"><div class="step-circle s3">03</div><div class="step-name">JavaScript</div><div class="step-desc">Lógica</div></div>
+      <div class="path-step"><div class="step-circle s4">04</div><div class="step-name">Proyecto</div><div class="step-desc">Tu primera web</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title" style="margin-bottom:4px">¿Por qué <span>LearnCode?</span></h2>
+  <p style="color:var(--muted);font-family:var(--font-mono);font-size:13px">Todo lo que necesitas para aprender</p>
+  <div class="features-grid">
+    <div class="feature"><div class="feature-icon">⚡</div><div class="feature-title">Playground interactivo</div><div class="feature-desc">Escribe y ejecuta código en el navegador sin instalar nada.</div></div>
+    <div class="feature"><div class="feature-icon">🤖</div><div class="feature-title">IA que te corrige</div><div class="feature-desc">Detecta errores y te da sugerencias al instante.</div></div>
+    <div class="feature"><div class="feature-icon">📊</div><div class="feature-title">Tests y evaluaciones</div><div class="feature-desc">Pon a prueba lo aprendido con ejercicios y tests.</div></div>
+    <div class="feature"><div class="feature-icon">📈</div><div class="feature-title">Progreso guardado</div><div class="feature-desc">Tu avance se guarda automáticamente en la nube.</div></div>
+    <div class="feature"><div class="feature-icon">🇵🇪</div><div class="feature-title">100% en español</div><div class="feature-desc">Todo el contenido y la IA responden en español.</div></div>
+    <div class="feature"><div class="feature-icon">🆓</div><div class="feature-title">Completamente gratis</div><div class="feature-desc">Sin suscripciones ni pagos. Para siempre.</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="cta" id="cta-section">
+    <h2>Empieza a programar <span>hoy</span></h2>
+    <p>Únete y comienza tu ruta de aprendizaje. Es gratis.</p>
+    <button class="btn btn-primary btn-lg" onclick="openModal('register')">Crear cuenta gratis →</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Learn<span>Code</span></div>
+  <div class="footer-text">Hecho con 💙 para aprender en español</div>
+</footer>
+
+<!-- MODAL LOGIN/REGISTER -->
+<div class="modal-overlay" id="modal" onclick="closeModalBg(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3 id="modal-title">Crear cuenta</h3>
+    <p class="modal-sub" id="modal-sub">Únete gratis y empieza a aprender hoy</p>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-register" onclick="switchTab('register')">Registrarse</button>
+      <button class="modal-tab" id="tab-login" onclick="switchTab('login')">Iniciar sesión</button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="form-register">
+      <div class="form-group">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-input" id="reg-nombre" placeholder="Tu nombre">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="reg-email" placeholder="tu@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-input" id="reg-pass" placeholder="Mínimo 6 caracteres">
+      </div>
+      <button class="form-btn" onclick="doRegister()" id="btn-register">Crear cuenta gratis</button>
+      <div class="form-error" id="reg-error"></div>
+      <div class="form-success" id="reg-success"></div>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="log-email" placeholder="tu@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-input" id="log-pass" placeholder="Tu contraseña">
+      </div>
+      <button class="form-btn" onclick="doLogin()" id="btn-login">Iniciar sesión</button>
+      <div class="form-error" id="log-error"></div>
+    </div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+const cursosConfig = {
+  html: { total: 8, bar: 'html-bar', pct: 'html-pct', info: 'html-info', card: 'card-html-bar' },
+  css:  { total: 10, bar: 'css-bar', pct: 'css-pct', info: 'css-info', card: 'card-css-bar' },
+  js:   { total: 12, bar: 'js-bar', pct: 'js-pct', info: 'js-info', card: 'card-js-bar' }
+};
+
+async function iniciarUI() {
+  const user = await getUsuario();
+  if (user) {
+    mostrarSesion(user);
+    cargarProgreso();
+  }
+}
+
+function mostrarSesion(user) {
+  const nombre = user.user_metadata?.nombre || user.email.split('@')[0];
+  document.getElementById('nav-right').innerHTML = `
+    <div class="user-info">
+      <div class="user-avatar">${nombre[0].toUpperCase()}</div>
+      <span class="user-name">${nombre}</span>
+      <button class="btn btn-danger" onclick="logout()">Salir</button>
+    </div>`;
+  document.getElementById('hero-section').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('cta-section').style.display = 'none';
+  document.getElementById('dash-welcome').textContent = `Bienvenida de vuelta, ${nombre} 👋`;
+}
+
+async function cargarProgreso() {
+  const todo = await getTodoProgreso();
+  Object.entries(cursosConfig).forEach(([curso, cfg]) => {
+    const completadas = todo.filter(p => p.curso === curso).length;
+    const pct = Math.round((completadas / cfg.total) * 100);
+    document.getElementById(cfg.bar).style.width = pct + '%';
+    document.getElementById(cfg.card).style.width = pct + '%';
+    document.getElementById(cfg.pct).textContent = pct + '%';
+    document.getElementById(cfg.info).textContent = `${completadas} de ${cfg.total} lecciones completadas`;
+  });
+}
+
+// ── MODAL ─────────────────────────────────────────────────────
+function openModal(tab) {
+  document.getElementById('modal').classList.add('open');
+  switchTab(tab || 'register');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function closeModalBg(e) { if (e.target.id === 'modal') closeModal(); }
+
+function switchTab(tab) {
+  document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('modal-title').textContent = tab === 'register' ? 'Crear cuenta' : 'Bienvenida de vuelta';
+  document.getElementById('modal-sub').textContent = tab === 'register' ? 'Únete gratis y empieza a aprender hoy' : 'Ingresa tus datos para continuar';
+}
+
+async function doRegister() {
+  const nombre = document.getElementById('reg-nombre').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  const err = document.getElementById('reg-error');
+  const suc = document.getElementById('reg-success');
+  const btn = document.getElementById('btn-register');
+  err.style.display = 'none'; suc.style.display = 'none';
+  if (!nombre || !email || !pass) { err.textContent = 'Completa todos los campos.'; err.style.display = 'block'; return; }
+  if (pass.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres.'; err.style.display = 'block'; return; }
+  btn.textContent = 'Creando cuenta...'; btn.disabled = true;
+  try {
+    await registrar(email, pass, nombre);
+    suc.textContent = '✓ Cuenta creada. Revisa tu email para confirmar.';
+    suc.style.display = 'block';
+    btn.textContent = 'Crear cuenta gratis'; btn.disabled = false;
+  } catch(e) {
+    err.textContent = e.message.includes('already') ? 'Este email ya está registrado.' : 'Error: ' + e.message;
+    err.style.display = 'block';
+    btn.textContent = 'Crear cuenta gratis'; btn.disabled = false;
+  }
+}
+
+async function doLogin() {
+  const email = document.getElementById('log-email').value.trim();
+  const pass = document.getElementById('log-pass').value;
+  const err = document.getElementById('log-error');
+  const btn = document.getElementById('btn-login');
+  err.style.display = 'none';
+  if (!email || !pass) { err.textContent = 'Completa todos los campos.'; err.style.display = 'block'; return; }
+  btn.textContent = 'Entrando...'; btn.disabled = true;
+  try {
+    const data = await login(email, pass);
+    closeModal();
+    mostrarSesion(data.user);
+    cargarProgreso();
+    btn.textContent = 'Iniciar sesión'; btn.disabled = false;
+  } catch(e) {
+    err.textContent = 'Email o contraseña incorrectos.';
+    err.style.display = 'block';
+    btn.textContent = 'Iniciar sesión'; btn.disabled = false;
+  }
+}
+
+iniciarUI();
+</script>
+</body>
+</html>
