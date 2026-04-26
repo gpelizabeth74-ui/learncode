@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Perfil — LearnCode</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--muted:#7d8590;--accent:#58a6ff;--accent2:#3fb950;--accent3:#f78166;--accent4:#e3b341;--html:#e34c26;--css:#79c0ff;--js:#f7df1e;--font-mono:'JetBrains Mono',monospace;--font-display:'Syne',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-display);min-height:100vh}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
+.logo{font-size:20px;font-weight:800}.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:1.5rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;transition:color .2s}.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.btn{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-display);transition:all .2s;border:none}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:transparent;border:1px solid var(--border);color:var(--accent3)}.btn-danger:hover{border-color:var(--accent3)}
+.user-info{display:flex;align-items:center;gap:10px}
+.user-avatar-nav{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#0e1117;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:var(--font-mono)}
+
+.page{max-width:1000px;margin:0 auto;padding:40px 2rem}
+
+/* PROFILE HEADER */
+.profile-header{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:24px}
+.avatar-big{width:80px;height:80px;border-radius:50%;background:var(--accent);color:#0e1117;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;font-family:var(--font-mono);flex-shrink:0}
+.profile-info h1{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:4px}
+.profile-info p{font-size:13px;font-family:var(--font-mono);color:var(--muted)}
+.profile-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:var(--font-mono);color:var(--accent4);margin-top:8px}
+.edit-btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-display);transition:all .2s}
+.edit-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+.stat-num{font-size:32px;font-weight:800;font-family:var(--font-mono);margin-bottom:4px}
+.stat-label{font-size:12px;font-family:var(--font-mono);color:var(--muted)}
+
+/* GRID 2 COL */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px}
+.card-title{font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+
+/* PROGRESS BARS */
+.prog-item{margin-bottom:16px}
+.prog-item:last-child{margin-bottom:0}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prog-name{font-size:13px;font-weight:700;font-family:var(--font-mono)}
+.prog-pct{font-size:13px;font-family:var(--font-mono);font-weight:700}
+.prog-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.prog-sub{font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-top:4px}
+
+/* ACHIEVEMENTS */
+.achievements-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.achievement{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;transition:all .2s}
+.achievement.unlocked{border-color:var(--accent4);background:#e3b34110}
+.achievement.unlocked:hover{transform:translateY(-2px)}
+.ach-icon{font-size:28px;margin-bottom:8px;font-family:var(--font-mono);filter:grayscale(1);opacity:.4}
+.achievement.unlocked .ach-icon{filter:none;opacity:1}
+.ach-name{font-size:12px;font-weight:700;margin-bottom:4px}
+.ach-desc{font-size:11px;font-family:var(--font-mono);color:var(--muted);line-height:1.4}
+.achievement.unlocked .ach-name{color:var(--accent4)}
+
+/* ACTIVITY */
+.activity-list{display:flex;flex-direction:column;gap:10px}
+.activity-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.activity-text{font-size:13px;font-family:var(--font-mono);flex:1}
+.activity-time{font-size:11px;font-family:var(--font-mono);color:var(--muted)}
+
+/* RADAR CHART */
+.skills-wrap{display:flex;align-items:center;justify-content:center;padding:10px 0}
+
+/* EDIT MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:40px;max-width:400px;width:90%;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.modal h3{font-size:20px;font-weight:800;margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-family:var(--font-mono);color:var(--muted);margin-bottom:6px;display:block}
+.form-input{width:100%;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;font-family:var(--font-mono);outline:none}
+.form-input:focus{border-color:var(--accent)}
+.form-btn{width:100%;padding:12px;background:var(--accent);color:#0e1117;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-display)}
+
+/* LOADING */
+.loading{text-align:center;padding:80px;font-family:var(--font-mono);color:var(--muted)}
+
+@media(max-width:768px){
+  .profile-header{grid-template-columns:1fr;text-align:center}
+  .avatar-big{margin:0 auto}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}
+  .achievements-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:inherit">Learn<span>Code</span></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="index.html#cursos">Cursos</a></li>
+    <li><a href="playground.html">Playground</a></li>
+    <li><a href="perfil.html" class="active">Mi perfil</a></li>
+  </ul>
+  <div class="nav-right" id="nav-right">
+    <button class="btn btn-ghost" onclick="window.location.href='index.html'">Iniciar sesión</button>
+  </div>
+</nav>
+
+<div class="page" id="page-content">
+  <div class="loading">Cargando tu perfil...</div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-modal" onclick="closeEdit(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('edit-modal').classList.remove('open')">✕</button>
+    <h3>Editar perfil</h3>
+    <div class="form-group">
+      <label class="form-label">Nombre</label>
+      <input type="text" class="form-input" id="edit-nombre" placeholder="Tu nombre">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Meta de aprendizaje</label>
+      <input type="text" class="form-input" id="edit-meta" placeholder="ej: Ser desarrolladora web">
+    </div>
+    <button class="form-btn" onclick="guardarEdicion()">Guardar cambios</button>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script src="progreso.js"></script>
+<script>
+const cursosConfig = {
+  html: { nombre: 'HTML', total: 8, color: 'var(--html)' },
+  css:  { nombre: 'CSS', total: 10, color: 'var(--css)' },
+  js:   { nombre: 'JavaScript', total: 12, color: 'var(--js)' },
+  python: { nombre: 'Python', total: 10, color: 'var(--accent2)' },
+  sql:  { nombre: 'SQL', total: 8, color: 'var(--accent)' }
+};
+
+const logros = [
+  { id: 'primer_paso', icon: '🚀', nombre: 'Primer paso', desc: 'Completa tu primera lección', check: (p) => p.length >= 1 },
+  { id: 'html_master', icon: '🏅', nombre: 'HTML Master', desc: 'Completa el curso de HTML', check: (p) => p.filter(x=>x.curso==='html').length >= 8 },
+  { id: 'css_wizard', icon: '🎨', nombre: 'CSS Wizard', desc: 'Completa el curso de CSS', check: (p) => p.filter(x=>x.curso==='css').length >= 10 },
+  { id: 'js_ninja', icon: '⚡', nombre: 'JS Ninja', desc: 'Completa el curso de JavaScript', check: (p) => p.filter(x=>x.curso==='js').length >= 12 },
+  { id: 'constante', icon: '🔥', nombre: 'Constante', desc: 'Completa 10 lecciones en total', check: (p) => p.length >= 10 },
+  { id: 'full_stack', icon: '👑', nombre: 'Full Stack', desc: 'Completa HTML, CSS y JS', check: (p) => {
+    const cursos = [...new Set(p.filter(x=>x.completado).map(x=>x.curso))];
+    return ['html','css','js'].every(c => cursos.includes(c));
+  }}
+];
+
+async function cargarPerfil() {
+  const user = await getUsuario();
+  if (!user) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  // Actualizar nav
+  const nombre = user.user_metadata?.nombre || user.email.split('@')[0];
+  document.getElementById('nav-right').innerHTML = `
+    <div class="user-info">
+      <div class="user-avatar-nav">${nombre[0].toUpperCase()}</div>
+      <span style="font-size:13px;font-weight:600">${nombre}</span>
+      <button class="btn btn-danger" onclick="logout()">Salir</button>
+    </div>`;
+
+  const todo = await getTodoProgreso();
+  const totalLecciones = todo.length;
+  const cursosCompletados = Object.entries(cursosConfig).filter(([c, cfg]) =>
+    todo.filter(p => p.curso === c).length >= cfg.total
+  ).length;
+  const puntajeTotal = todo.reduce((acc, p) => acc + (p.puntaje || 0), 0);
+  const meta = localStorage.getItem('lc_meta') || 'Aprender programación web';
+
+  // Calcular racha (días consecutivos — simplificado)
+  const fechas = [...new Set(todo.map(p => p.fecha?.split('T')[0]))].sort();
+  let racha = fechas.length > 0 ? 1 : 0;
+
+  // Logros desbloqueados
+  const logrosUnlocked = logros.filter(l => l.check(todo));
+
+  document.getElementById('page-content').innerHTML = `
+    <div class="profile-header">
+      <div class="avatar-big">${nombre[0].toUpperCase()}</div>
+      <div class="profile-info">
+        <h1 id="nombre-display">${nombre}</h1>
+        <p>${user.email}</p>
+        <div class="profile-badge">🎯 ${meta}</div>
+      </div>
+      <button class="edit-btn" onclick="abrirEdicion('${nombre}','${meta}')">✏️ Editar</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--accent)">${totalLecciones}</div>
+        <div class="stat-label">Lecciones completadas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--accent2)">${cursosCompletados}</div>
+        <div class="stat-label">Cursos terminados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--accent4)">${logrosUnlocked.length}</div>
+        <div class="stat-label">Logros desbloqueados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--accent3)">${puntajeTotal}</div>
+        <div class="stat-label">Puntos totales</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">📈 Progreso por curso</div>
+        ${Object.entries(cursosConfig).map(([c, cfg]) => {
+          const completadas = todo.filter(p => p.curso === c).length;
+          const pct = Math.round((completadas / cfg.total) * 100);
+          return `<div class="prog-item">
+            <div class="prog-top">
+              <span class="prog-name" style="color:${cfg.color}">${cfg.nombre}</span>
+              <span class="prog-pct" style="color:${cfg.color}">${pct}%</span>
+            </div>
+            <div class="prog-bar"><div class="prog-fill" style="background:${cfg.color};width:${pct}%"></div></div>
+            <div class="prog-sub">${completadas} de ${cfg.total} lecciones</div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏆 Logros</div>
+        <div class="achievements-grid">
+          ${logros.map(l => {
+            const unlocked = l.check(todo);
+            return `<div class="achievement ${unlocked ? 'unlocked' : ''}">
+              <div class="ach-icon">${l.icon}</div>
+              <div class="ach-name">${l.nombre}</div>
+              <div class="ach-desc">${l.desc}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🕐 Actividad reciente</div>
+      <div class="activity-list">
+        ${todo.slice(-8).reverse().map(p => {
+          const cfg = cursosConfig[p.curso];
+          const fecha = new Date(p.fecha).toLocaleDateString('es-PE', {day:'numeric',month:'short'});
+          return `<div class="activity-item">
+            <div class="activity-dot" style="background:${cfg?.color||'var(--accent)'}"></div>
+            <div class="activity-text">Completaste la lección ${p.leccion} de <strong>${cfg?.nombre||p.curso}</strong></div>
+            <div class="activity-time">${fecha}</div>
+          </div>`;
+        }).join('') || '<div style="font-family:var(--font-mono);font-size:13px;color:var(--muted)">No hay actividad aún. ¡Empieza un curso!</div>'}
+      </div>
+    </div>
+  `;
+}
+
+function abrirEdicion(nombre, meta) {
+  document.getElementById('edit-nombre').value = nombre;
+  document.getElementById('edit-meta').value = meta;
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeEdit(e) {
+  if (e.target.id === 'edit-modal') document.getElementById('edit-modal').classList.remove('open');
+}
+
+async function guardarEdicion() {
+  const nombre = document.getElementById('edit-nombre').value.trim();
+  const meta = document.getElementById('edit-meta').value.trim();
+  if (!nombre) return;
+  localStorage.setItem('lc_meta', meta);
+  const sb = await getSB();
+  await sb.auth.updateUser({ data: { nombre } });
+  document.getElementById('edit-modal').classList.remove('open');
+  cargarPerfil();
+}
+
+cargarPerfil();
+</script>
+</body>
+</html>
